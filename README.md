@@ -44,6 +44,26 @@ opencode plugin add git+file:///home/crl/code/typescript/opencode-go-usage
 
 > 注意：npm 上的 `opencode-go-usage` 是另一个作者的包，与本项目无关；不要用包名安装。
 
-## 依赖
+## 依赖与实现说明
 
-`@opencode/plugin/tui`、`@opentui/solid`、`solid-js` 由 OpenCode 在运行时解析；`@opencode/plugin` 仅服务端入口使用（`Plugin.define` 是恒等函数），本地 `npm install` 只用于开发时的类型解析。
+- `@opencode/plugin/tui`、`@opentui/solid`、`solid-js` 由 OpenCode 在运行时解析；`@opencode/plugin` 仅服务端入口使用（`Plugin.define` 是恒等函数），本地 `npm install` 只用于开发时的类型解析。
+
+从 git/npm 安装成包插件时（OpenCode 会克隆到 `~/.cache/opencode/npm/…` 再加载），有两点必须注意：
+
+1. **JSX 运行时依赖要自带**：OpenCode 不会把 `@opentui/solid` / `solid-js` 映射到宿主副本，所以 `package.json` 必须声明 `peerDependencies`（`@opentui/core`、`@opentui/solid`、`solid-js`，包管理器会自动安装），并且 `tui.tsx` 顶部必须保留 `/** @jsxImportSource @opentui/solid */`，否则会按 React JSX 处理并报 `Cannot find package 'react'`。
+2. **不要依赖 Solid 响应式更新**：插件模块与宿主各自持有 solid-js 副本，`createSignal` 或 `context.storage.memory` 的更新不会触发宿主渲染的组件重绘。因此侧边栏在每次数据刷新后重新注册 `sidebar.content` 插槽（`tui.tsx` 里的 `mount()`），用重建代替响应式更新。
+
+## 更新
+
+修改源码后提交，然后重新安装：
+
+```bash
+git commit -am "..."
+opencode plugin update git+file:///home/crl/code/typescript/opencode-go-usage
+```
+
+## 卸载
+
+```bash
+opencode plugin remove git+file:///home/crl/code/typescript/opencode-go-usage
+```

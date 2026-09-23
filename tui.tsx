@@ -108,6 +108,36 @@ export default Plugin.define({
                 })
               },
             },
+            {
+              id: "go-usage.refresh",
+              title: "Refresh OpenCode Go usage",
+              group: "Go",
+              palette: true,
+              slash: { name: "go-refresh", aliases: ["go-usage-refresh"] },
+              run: async () => {
+                const result = await fetchUsage()
+                apply(result)
+                if (!result.usage) {
+                  await context.ui.toast.show({
+                    title: "Go usage refresh failed",
+                    message: result.note,
+                    variant: "error",
+                  })
+                  return
+                }
+                const current = result.usage
+                const summary = [
+                  `5h ${percent(remaining(current.rolling))}`,
+                  `wk ${percent(remaining(current.weekly))}`,
+                  `mo ${percent(remaining(current.monthly))}`,
+                ].join(" · ")
+                await context.ui.toast.show({
+                  title: "Go usage refreshed",
+                  message: `${summary} left`,
+                  variant: "success",
+                })
+              },
+            },
           ],
         }))
         return null

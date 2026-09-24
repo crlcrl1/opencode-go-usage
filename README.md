@@ -86,13 +86,6 @@ To test local changes without reinstalling, point OpenCode at the checkout direc
 
 Then restart the TUI. When you are done, install from Git again (see above) to load the released version.
 
-### Notes for plugin authors
-
-Installing a TUI plugin as a Git/npm package has two gotchas that this project handles explicitly:
-
-1. **Bring your JSX runtime with you.** OpenCode does not map `@opentui/solid` / `solid-js` to the host copies for package plugins, so the package must declare them as `peerDependencies` (they get installed with the package), and `tui.tsx` must keep its `/** @jsxImportSource @opentui/solid */` pragma. Without the pragma the file is transpiled as React JSX and fails with `Cannot find package 'react'`.
-2. **Do not rely on Solid reactivity.** The plugin module and the host each have their own `solid-js` copy, so updating a signal or `context.storage.memory` does not re-render components owned by the host. The sidebar therefore replaces its `sidebar.content` slot on every refresh instead of updating reactive state.
-
 ## License
 
 [Apache-2.0](LICENSE)

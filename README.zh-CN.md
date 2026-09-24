@@ -86,13 +86,6 @@ npm install
 
 然后重启 TUI。测试完成后按上面的方式从 Git 安装正式版本。
 
-### 插件作者的注意事项
-
-把 TUI 插件作为 Git/npm 包安装时有两个坑，本项目都已显式处理：
-
-1. **自带 JSX 运行时**：OpenCode 不会把 `@opentui/solid` / `solid-js` 映射到宿主副本，因此包必须把这两个依赖声明为 `peerDependencies`（随包一同安装），并且 `tui.tsx` 顶部必须保留 `/** @jsxImportSource @opentui/solid */`。缺少该 pragma 时会按 React JSX 转译并报 `Cannot find package 'react'`。
-2. **不要依赖 Solid 响应式更新**：插件模块与宿主各持一份 `solid-js`，更新 signal 或 `context.storage.memory` 不会触发宿主拥有的组件重绘。因此侧边栏在每次刷新后重新注册 `sidebar.content` 插槽，用重建代替响应式更新。
-
 ## 许可证
 
 [Apache-2.0](LICENSE)

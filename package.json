@@ -1,9 +1,24 @@
 {
   "name": "opencode-go-usage",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "type": "module",
-  "description": "Show OpenCode Go remaining quota in the TUI sidebar, with a /go-usage command",
+  "description": "Show OpenCode Go remaining quota in the OpenCode TUI sidebar, with /go-usage and /go-refresh commands",
+  "license": "Apache-2.0",
+  "author": "crl (https://github.com/crlcrl1)",
+  "homepage": "https://github.com/crlcrl1/opencode-go-usage#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/crlcrl1/opencode-go-usage.git"
+  },
+  "keywords": [
+    "opencode",
+    "opencode-plugin",
+    "tui",
+    "quota",
+    "usage",
+    "opencode-go"
+  ],
   "exports": {
     ".": "./index.ts",
     "./tui": "./tui.tsx"
@@ -13,7 +28,9 @@
     "tui.ts",
     "tui.tsx",
     "usage.ts",
-    "README.md"
+    "README.md",
+    "LICENSE",
+    "NOTICE"
   ],
   "scripts": {
     "pack": "npm pack --pack-destination dist"
